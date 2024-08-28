@@ -16,7 +16,6 @@ import { ScheduleModule } from '@nestjs/schedule';
       name: 'real-time-data-queue', 
     }),
     ScheduleModule.forRoot(),
-    //forwardRef(() => AssetEssentialsRtModule),
 
     BullModule.forRoot({
       redis: {
