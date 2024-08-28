@@ -7,15 +7,20 @@ import { AssetEssentialsRealTimeEntity, AssetEssentialsWithoutRealTimeEntity } f
 import { AssetEssentialsRtJobService } from './asset-essentials-rt-job.service';
 import { AssetEssentialsRtProcessorService } from './asset-essentials-rt-processor.service';
 import { AssetEssentialsRtModule } from 'src/modules/asset-essentials-rt/asset-essentials-rt.module';
+import { getOrmConfig } from 'src/config/ormConfig';
 import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
-  imports: [  
+  imports: [
+    TypeOrmModule.forRootAsync({
+      useFactory: getOrmConfig,
+    }),  
     TypeOrmModule.forFeature([AssetEssentialsRealTimeEntity, AssetEssentialsWithoutRealTimeEntity]),
     BullModule.registerQueue({
       name: 'real-time-data-queue', 
     }),
     ScheduleModule.forRoot(),
+    forwardRef(() => AssetEssentialsRtModule),
 
     BullModule.forRoot({
       redis: {
